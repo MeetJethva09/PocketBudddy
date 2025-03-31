@@ -1,0 +1,25 @@
+.form-group{
+    margin-top: 14px;
+}
+label{
+    font-weight: bold;
+}
+textarea{
+    filter: drop-shadow(0px 0px 3px rgb(215, 215, 215));
+    border-radius: 10px;
+    padding: 10px;
+    border :none
+}
+
+small{
+    color: darkcyan;
+}
+h3{
+    margin-top: 10px;
+    text-align: center;
+    filter: drop-shadow(0px 0px 6px rgb(212, 189, 189));
+    color: rgb(67, 71, 74);
+}
+button{
+    margin-top: 10px;
+}

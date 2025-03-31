@@ -1,0 +1,49 @@
+.btn{
+    background-color: #7773c5;
+    padding: 7px;
+    width: 105px;
+    color: white;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 7px;
+    transition: all 0.3s;
+    &:hover{
+        background-color:transparent;
+        transform: translateY(1px);
+        border: 1px solid black;
+        color: black;
+    }
+}
+.btns{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    
+}
+.btn2{
+    background-color: rgb(137, 176, 230);
+    padding: 7px;
+    width: 100px;
+    margin-left: 10px;
+    margin: 5px;
+    transition: all 0.5s;
+    border: 1px solid black;
+    border-radius: 7px;
+    &:hover{
+        transform: translateY(1px);
+        color: black;
+      
+        background-color: transparent;
+
+    }
+}
+button{
+    transition: all 0.5s;
+}
+#sec1{
+    background: url("/src/assets/images/hero.webp");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
