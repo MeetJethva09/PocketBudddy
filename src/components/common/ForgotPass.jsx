@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import axios from 'axios';
+import { toast ,ToastContainer , Bounce } from 'react-toastify';
 
 
 export const ForgotPass = () => {
@@ -10,11 +11,28 @@ export const ForgotPass = () => {
     const submitHandler =async (data) =>{
         const verifyEmail = await axios.post("/forgotpass" , data);
         console.log(verifyEmail.data.message);
+        toast.success("Link Send to your E-mail")
     }
 
 
   return (
     <div>
+
+        <ToastContainer
+        position="top-right"
+        autoClose={800}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+        />
+
+
          <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}

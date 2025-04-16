@@ -1,88 +1,104 @@
-import React from 'react'
-import "../../assets/uprofile.css"
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+// import "../../assets/uprofile.css"
 
 export const UserProfile = () => {
+
+    const [user, setuser] = useState({})
+
+    const getUserData = async () =>{
+      const res = await axios.get("/userid/" + localStorage.getItem("id"));
+      setuser(res.data.data);
+    }
+
+useEffect(()=>{
+  getUserData();
+},[])
+
+
   return (
     <div>
- <div className="user-profile-container">
-      <div className="user-profile">
-        <div className="user-avatar">
-          <img src='/src/assets/images/user.png' />
-        </div>
-        
-        <div className="user-info">
-          <h2 className="user-name">user</h2>
-          <p className="user-title">uhuhuh</p>
-          <div className="user-stats">
-            <div className="stat-item">
-              <span className="stat-value">revi</span>
-              <span className="stat-label">Reviews</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">bhyvyvv</span>
-              <span className="stat-label">Following</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">kuhuuh</span>
-              <span className="stat-label">Followers</span>
-            </div>
+ <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div className="w-full max-w-2xl bg-white rounded-xl shadow-sm overflow-hidden">
+    {/* Header */}
+    <div className="px-6 py-5 border-b border-gray-100 flex justify-around items-center">
+      <h2 className="text-xl font-semibold text-gray-800">User Profile</h2>
+          <div className="">
+
+            <button className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+              Edit Profile
+            </button>
+            <button className="px-4 py-2 bg-yellow-500 text-black ml-3 text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors">
+            Back to Home
+            </button>
+
           </div>
-        </div>
-        
-        <div className="user-restaurant-info">
-          <div className="restaurant-meta">
-            <div className="meta-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span>njjjbbubub</span>
-            </div>
-            <div className="meta-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>hourrr</span>
-            </div>
-          </div>
-          <div className="restaurant-rating">
-            <div className="rating-stars">
-            
-                <svg 
-                  key=''
-                  width="16" 
-                  height="16" 
-                  viewBox="0 0 24 24" 
-                  fill=''
-                  stroke="#FFD700" 
-                  strokeWidth="2"
-                >
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                </svg>
-             
-            </div>
-            <span className="rating-value">rev</span>
-            <span className="rating-count"> reviews</span>
-          </div>
-        </div>
-        
-        <div className="user-actions">
-          <button className="btn btn-primary">Follow</button>
-          <button className="btn btn-outline">Message</button>
+    </div>
+
+    {/* Profile Content */}
+    <div className="p-6 flex flex-col md:flex-row gap-8">
+      {/* Avatar */}
+      <div className="flex-shrink-0">
+        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+         <img src="/src/assets/images/user.png" alt="" className='w-full h-full object-cover' />
         </div>
       </div>
-      
-      <div className="user-bio">
-        <p>boiiii</p>
-       
-          <div className="user-specialties">
-            <strong>Specialties: mkn</strong>
-           
+
+      {/* Details */}
+      <div className="flex-grow space-y-5">
+        {/* Status */}
+        <div className="flex gap-3">
+          <span className="px-4 py-2 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+            Active
+          </span>
+          <span className="px-4 py-2 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">
+            Inactive
+          </span>
+          <span className="px-4 py-2 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">
+            Pending
+          </span>
+        </div>
+
+        {/* Form Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <div className="px-4 py-2.5 bg-gray-50 rounded-lg border border-gray-200 text-gray-700">
+              {user.firstName}
+            </div>
           </div>
-        
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+            <div className="px-4 py-2.5 bg-gray-50 rounded-lg border border-gray-200 text-gray-700">
+              {user.lastName}
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <div className="px-4 py-2.5 bg-gray-50 rounded-lg border border-gray-200 text-gray-700">
+            {user.email}
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+            <div className="px-4 py-2.5 bg-gray-50 rounded-lg border border-gray-200 text-gray-700">
+              +91 {user.contact}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>    
+    </div>
+  </div>
+</div>   
+
+
+
+
+
+
 
     </div>
   )

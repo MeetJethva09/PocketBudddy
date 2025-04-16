@@ -24,6 +24,18 @@ import { ViewRest } from './components/owner/ViewRest'
 import { Demo } from './components/admin/Demo'
 import { ForgotPass } from './components/common/ForgotPass'
 import { ResetPass } from './components/common/ResetPass'
+import { UpdateOffer } from './components/owner/UpdateOffer'
+import { AllUsers } from './components/admin/AllUsers'
+import { AllRest } from './components/admin/AllRest'
+import { AdminSidebar } from './components/owner/AdminSidebar'
+import { AllOffers } from './components/admin/AllOffers'
+import { UserViewOffer } from './components/user/UserViewOffer'
+import { ClaimedOffers } from './components/user/ClaimedOffers'
+import { RatingOffer } from './components/user/ratingOffer'
+import { Ratings } from './components/owner/Ratings'
+import { AllRatings } from './components/admin/AllRatings'
+
+
 
 
 
@@ -49,9 +61,17 @@ function App() {
 
           <Route path='/user' element={<UserSidebar />} >
           </Route>
+          <Route path='/userviewoffer/:id' element={<UserViewOffer/>}/>
           <Route path='/userprofile' element={<UserProfile/>} />
+          <Route path='/userclaimeoffers/:offerid' element={<ClaimedOffers/>} />
+          <Route path='/ratingoffer/:offerid' element={<RatingOffer/>} />
            
             <Route path='/demo' element={<Demo/>}/>
+            <Route path='/adminsidebar' element={<AdminSidebar/>}/>
+            <Route path='/allusers' element={<AllUsers />}/>
+            <Route path='/allratings' element={<AllRatings/>}/>
+            <Route path='/allrests' element={<AllRest />}/>
+            <Route path='/alloffers' element={<AllOffers />} />
 
           <Route path='/rest' element={<OwnerSidebar />}/>
 
@@ -59,8 +79,10 @@ function App() {
           
           <Route path='/viewoffer' element={<ViewOffers />} />
           <Route path='/viewrest' element={<ViewRest />} />
+          <Route path='/updateoffer/:offerid' element={<UpdateOffer />} />
           <Route path='/addrest' element={<OwnerRest/>}/>
           <Route path='/onlyside' element={<OnlySide/>} />
+          <Route path="/viewratings" element={<Ratings/>}/>
         
 
         </Route>

@@ -1,3 +1,4 @@
+
 import {React , useEffect, useState} from 'react'
 import { OnlySide } from './OnlySide'
 import { ToastContainer, Slide, toast } from 'react-toastify'
@@ -64,13 +65,12 @@ export const OwnerRest = () => {
   const getCityBySid = async (id) =>{
       const cityBySid = await axios.get("/city/citybystateid/" + id);
       setCities(cityBySid.data.data);
-}
+  }
 
   const getAreaByCityId = async (id) =>{
     const areaByCid = await axios.get("/area/areabycityid/" + id);
     setAreas(areaByCid.data.data);
   }
-
 
   useEffect(()=>{
       getAllStates();
@@ -139,230 +139,219 @@ export const OwnerRest = () => {
     }
   }
 
-  console.log(errors)
-
   return (
-    <div>
-       <ToastContainer
-              position="top-right"
-              autoClose={1000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick={false}
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
-              transition={Slide}
-            />
-            
-        <div className='flex'>
+    <div className="flex min-h-screen bg-gray-50">
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
+      
+      {/* Sidebar - Fixed width */}
+      
+      <div className="hidden md:block fixed h-full w-64 flex-shrink-0 z-10">
         <OnlySide/>
-             <div className="min-h-screen w-full bg-gradient-to-r from-purple-50 to-indigo-50 flex items-center justify-center p-6">
-      {/* Form Container */}
-      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Add Restaurant</h1>
-
-        {/* Add Restaurant Form */}
-        <form  className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
-          {/* Restaurant Name Field */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Restaurant Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter restaurant name"
-              {...register("name",allValidators.nameValidator)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-            />
-              <span style={{color:"red"}}>{errors.name?.message}</span>
-          </div>
-        
-
-          {/* Description Field */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Enter restaurant description"
-              {...register("desc",allValidators.descValidator)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              rows="3"
-              required
-            ></textarea>
-          </div>
-{/* Cata */}
-
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Category
-            </label>
-            <select className='w-full px-4 py-2 border border-gray-300 rounded-lg
-             focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none' {...register("category",allValidators.categoryValidator)}>
-                <option value="" selected disabled>Selct Category</option>
-                <option value="Restaurant">Restaurant</option>
-                <option value="Cafe">Cafe</option>
-                <option value="Food Truck">Food Truck</option>
-            </select>
-          </div>
-
-
-          {/* address Field */}
-          <div>
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              placeholder="Enter restaurant Address"
-              {...register("address",allValidators.addressValidator)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              required
-            />
-          </div>
-
-          {/* time Field */}
-          <div className="flex gap-8">
-          <div>
-            <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700">
-              Timing
-            </label>
-            <input
-              type="text"
-              id="cuisine"
-              name="cuisine"
-              placeholder="Enter Timing"
-              {...register("timing",allValidators.timeValidator)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              required
-            />
-          </div>
-
-          {/* contact */}
-
-          <div>
-            <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700">
-              Contact
-            </label>
-            <input
-              type="text"
-              id="cuisine"
-              name="cuisine"
-              placeholder="Enter Contact"
-              {...register("contact",allValidators.contactValidator)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              required
-            />
-          </div> </div>
-
-          <div className="flex gap-10 flex-wrap">
-
-             {/* state */}
-
-          <div>
-            <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700">
-             Select State
-            </label>
-            <select {...register("state",allValidators.stateValidator)} className='w-full px-4 py-2 border border-gray-300 rounded-lg
-             focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none' onChange = {(e)=> {getCityBySid(e.target.value)}} 
-             >
-                <option value="" selected disabled>Select State</option>
-                {
-                    states?.map((state)=>{
-                      return (
-                       <option key={state._id} value={state._id}>{state.stateName}</option>
-                      )
-                    })
-                }
-            </select>
-          </div>
-
-        {/* City */}
-
-          <div>
-            <label htmlFor="" className="block text-sm font-medium text-gray-700">
-             Select City
-            </label>
-            <select {...register("city",allValidators.cityValidator)} onChange = {(e)=>{getAreaByCityId(e.target.value)}} className='w-full px-4 py-2 border border-gray-300 rounded-lg
-             focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none'>
-                <option value="" selected disabled>Selct City</option>
-                {
-                  cities?.map((city)=>{
-                    return (
-                      <option key={city._id} value={city._id}>{city.cityName}</option>
-                    )
-                  })
-                }
-                
-            </select>
-          </div>
-
-{/* Area */}
-
-          <div>
-            <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700">
-              Select Area
-            </label>
-            <select {...register("area",allValidators.areaValidator)} className='w-full px-4 py-2 border border-gray-300 rounded-lg
-             focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none' {...register("area")}>
-                <option value="" selected disabled>Selct Area</option>
-                {
-                  areas?.map((area)=>{
-                    return (
-                      <option key={area._id} value={area._id}>{area.areaName}</option>
-                    )
-                  })
-                }
-              
-            </select>
-          </div>
-
-
-          </div>
-          {/* Foodtype */}
-
-          <div>
-            <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700">
-              Select Foodtype
-            </label>
-            <select className='w-full px-4 py-2 border border-gray-300 rounded-lg
-             focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none' {...register("foodtype",allValidators.foodtypeValidator)}>
-                <option value="" selected disabled>Selct Foodtype</option>
-                <option value="Punjabi"  >Punjabi</option>
-                <option value="South Indian"  >South Indian</option>
-                <option value="Chienese food"  >Chienese Food</option>
-                <option value="Gujarati food"  >Gujarati food</option>
-                <option value="Italian food"  >Italian food</option>
-              
-            </select>
-          </div>
-
-
-          {/* Image Upload Field */}
-         
-
-          {/* Submit Button */}
-          <div>
-            <button
-              type="submit"
-              className="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors duration-300"
-            >
-              Add Restaurant
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
-    </div>
 
-  
+      {/* Main Content Area */}
+      <div className="flex-1 ml-0 md:ml-64 overflow-auto">
+        <div className="min-h-screen flex items-center justify-center p-6">
+          <div className="w-full max-w-4xl">
+          {/* Form Container */}
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            {/* Form Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white">
+              <h1 className="text-2xl font-bold">Add New Restaurant</h1>
+              <p className="opacity-90">Fill in the details to register your restaurant</p>
+            </div>
+
+            {/* Form Content */}
+            <div className="p-6">
+              <form onSubmit={handleSubmit(submitHandler)} className="space-y-6">
+                {/* Restaurant Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Name *</label>
+                  <input
+                    type="text"
+                    placeholder="Enter restaurant name"
+                    {...register("name", allValidators.nameValidator)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                  />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                  )}
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                  <textarea
+                    placeholder="Enter restaurant description"
+                    {...register("desc", allValidators.descValidator)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    rows="3"
+                  />
+                  {errors.desc && (
+                    <p className="mt-1 text-sm text-red-600">{errors.desc.message}</p>
+                  )}
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                  <select
+                    {...register("category", allValidators.categoryValidator)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                  >
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Cafe">Cafe</option>
+                    <option value="Food Truck">Food Truck</option>
+                  </select>
+                  {errors.category && (
+                    <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+                  )}
+                </div>
+
+                {/* Address */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                  <input
+                    type="text"
+                    placeholder="Enter restaurant address"
+                    {...register("address", allValidators.addressValidator)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                  />
+                  {errors.address && (
+                    <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+                  )}
+                </div>
+
+                {/* Timing and Contact */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Timing *</label>
+                    <input
+                      type="text"
+                      placeholder="Enter timing (e.g. 10AM - 10PM)"
+                      {...register("timing", allValidators.timeValidator)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    />
+                    {errors.timing && (
+                      <p className="mt-1 text-sm text-red-600">{errors.timing.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact *</label>
+                    <input
+                      type="text"
+                      placeholder="Enter contact number"
+                      {...register("contact", allValidators.contactValidator)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    />
+                    {errors.contact && (
+                      <p className="mt-1 text-sm text-red-600">{errors.contact.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Location Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                    <select
+                      {...register("state", allValidators.stateValidator)}
+                      onChange={(e) => {getCityBySid(e.target.value)}}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    >
+                      <option value="" disabled selected>Select State</option>
+                      {states?.map((state) => (
+                        <option key={state._id} value={state._id}>{state.stateName}</option>
+                      ))}
+                    </select>
+                    {errors.state && (
+                      <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                    <select
+                      {...register("city", allValidators.cityValidator)}
+                      onChange={(e) => {getAreaByCityId(e.target.value)}}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    >
+                      <option value="" disabled selected>Select City</option>
+                      {cities?.map((city) => (
+                        <option key={city._id} value={city._id}>{city.cityName}</option>
+                      ))}
+                    </select>
+                    {errors.city && (
+                      <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Area *</label>
+                    <select
+                      {...register("area", allValidators.areaValidator)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                    >
+                      <option value="" disabled selected>Select Area</option>
+                      {areas?.map((area) => (
+                        <option key={area._id} value={area._id}>{area.areaName}</option>
+                      ))}
+                    </select>
+                    {errors.area && (
+                      <p className="mt-1 text-sm text-red-600">{errors.area.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Food Type */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Food Type *</label>
+                  <select
+                    {...register("foodtype", allValidators.foodtypeValidator)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                  >
+                    <option value="" disabled selected>Select Food Type</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="South Indian">South Indian</option>
+                    <option value="Chienese food">Chienese Food</option>
+                    <option value="Gujarati food">Gujarati food</option>
+                    <option value="Italian food">Italian food</option>
+                  </select>
+                  {errors.foodtype && (
+                    <p className="mt-1 text-sm text-red-600">{errors.foodtype.message}</p>
+                  )}
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-colors shadow-md"
+                  >
+                    Add Restaurant
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
     </div>
   )
 }

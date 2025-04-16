@@ -1,413 +1,241 @@
-import React, { useEffect } from 'react'
-import "../../assets/signupstyle.css"
-import { useForm } from 'react-hook-form'
-import { UserSidebar } from '../layouts/UserSidebar'
-import { ToastContainer , Bounce , toast} from 'react-toastify'
-import axios from 'axios'
-import { useState } from 'react'
-import {  useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 
-
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const SignUp = () => {
-   
+    const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm({});
+    const [roles, setRoles] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const navigator = useNavigate();
-    const {register , handleSubmit , formState:{errors}} = useForm();
-    const [roles , setRoles] = useState([]);
-
-
-    //fetch allroles from database
-    const getAllRole = async () =>{
-      const res = await axios.get("/data");
-      setRoles(res.data.data);
-    }
-
-  useEffect(()=>{
-    getAllRole()
-  },[])
-
-    const submitHandler =async (data) =>{
-      console.log(data);
-  
-      const res = await axios.post("/signup",data);
-  
-      console.log(res.data);
-   
-
-      toast.success('User created Successfully', {
-        position: "top-right",
-        autoClose: 1200,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-        });
-
-        setTimeout(()=>{
-          navigator("/signin");
-        },900)
-   
-    }
-
-    
-   
-      const allValidators = {
-        nameValidators : {
-          required : {
-            value  : true,
-            message : "*Name is required.."
-          }
-        },
-
-        emailValidators : {
-          required : {
-            value : true,
-            message : "*Email is required.."
-          }
-        },
-
-        passwordValidators : {
-          required : {
-            value : true,
-            message : "*Paasword is required.."
-          },
-          minLength : {
-            value : 8,
-            message : "Password length minimum eight required.."
-          }
-        },
-        ageValidators : {
-          required : {
-            value : true,
-            message : "*Age is required.."
-          }
-        },
-     
-        roleVlidators : {
-          required : {
-            value : true,
-            message : "*Role is required.."
-          }
-        },
-        genderValidators : {
-          required : {
-            value : true,
-            message : "*Gender is required.."
-          }
-        },
-        contactValidators : {
-          required : {
-            value : true,
-            message : "*Contact is required.."
-          },
-          minLength : {
-            value : 10,
-            message : "Please Enter valid contact"
-          },
-          maxLength : {
-            value : 10,
-            message : "Please Enter valid contact"
-          }
-        },
-
-      }
-
-  return (
-    <>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={800}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
-
-   
-
-{/* 
-<div className="container" style={{width : "55%",borderRadius:"10px",boxShadow:"0px 0px 4px black",padding:"35px",marginTop:"2rem"}}>
-
-  
-<form onSubmit={handleSubmit(submitHandler)}>
-  <div class="form-group">
-
-    <h3>Register Your Account</h3>
-
-    <div class="form-group">
-    <label for="exampleInputPassword1">FirstName : </label>
-    <input type="text" class="form-control" id="exampleInputPassword1"  {...register("firstName",allValidators.nameValidators)}  placeholder="First Name"/>
-    <span style={{color:"red"}}>{errors.firstName ? errors.firstName.message : "" } </span>
-  </div>
-
-    <div class="form-group">
-    <label for="exampleInputPassword1">lastName : </label>
-    <input type="text" class="form-control" id="exampwleInputPassword1"  {...register("lastName",allValidators.nameValidators)}  placeholder="Last Name"/>
-    <span style={{color:"red"}}>{errors.lastName ? errors.lastName.message : "" } </span>
-  </div><br />
-
-
-    <label for="exampleInputEmail1">Email address : </label>
-    <input type="email" class="form-control" id="exampleInputEmrail1" {...register("email",allValidators.emailValidators)} placeholder="Enter email"/>
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small><br />
-    <span style={{color:"red"}}>{errors.email ? errors.email.message : ""}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password : </label>
-    <input type="password" class="form-control" id="exampleInpqutPassword1"  {...register("password",allValidators.passwordValidators)}  placeholder="Password"/>
-    <span style={{color:"red"}}>{errors.password ? errors.password.message : "" } </span>
-  </div>
-
-  <div className="form-group">
-    <label for="gen">Gender : </label><br />
-    <select name="" id="gen" className='form-control' {...register("gender",allValidators.genderValidators) }>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-    </select>
-    <span style={{color:"red"}}>{errors.gender ? errors.gender.message : ""}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">Age : </label>
-    <input type="number" class="form-control" id="examwwpleInputPassgword1"  {...register("age",allValidators.ageValidators)}  placeholder="Age"/>
-    <span style={{color:"red"}}>{errors.age ? errors.age.message : "" } </span>
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">Contact : </label>
-    <input type="number" class="form-control" id="exampleInputPassddword1"  {...register("contact",allValidators.contactValidators)}  placeholder="Contact"/>
-    <span style={{color:"red"}}>{errors.contact ? errors.contact.message : "" } </span>
-  </div>
-
-  <div class="form-group">
-    <label for="exampleInputPassword1">Role : </label>
-
-    <select id="" className='form-control' onChange={(e)=> getAllRole(e.target.value)} {...register("role",allValidators.roleVlidators)}>
-      <option value="" disabled selected>Select Role</option>
-        {
-             roles.map((role)=>{
-                  return (
-                    <option value={role._id}>{role.roleName}</option>
-                  )
-            }) 
+    const getAllRoles = async () => {
+        try {
+            const res = await axios.get("/data");
+            setRoles(res.data.data);
+        } catch (error) {
+            console.error("Error fetching roles:", error);
         }
-    </select>
+    };
 
-    <span style={{color:"red"}}>{errors.role ? errors.role.message : "" } </span>
-  </div>
+    useEffect(() => {
+        getAllRoles();
+    }, []);
 
-  <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1"/>
-    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
-  </div>
-  <Link to="/signin" style={{fontSize:"14px" , textDecoration:"none"}}>Already have Account</Link><br />
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-  <button type="reset" class="btn btn-warning" style={{marginLeft : "10px"}}>Reset</button>
-</form>
-
-</div> */}
-
-  <div
-        className="min-h-screen flex items-center justify-center bg-cover bg-center"
-        style={{ backgroundImage: `url('/src/assets/images/ll.jpg')` }} // Replace with your background image URL
-      >
-        {/* Login Form Container */}
-        <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-2xl mt-5 shadow-2xl p-8 w-screen max-w-md">
-          {/* Logo and Title */}
-          <div className="text-center mb-8">
-          <Link to={'/'}>
-            <img
-              src="/src/assets/images/food.webp" // Replace with your logo URL
-              alt="PocketBuddy Logo"
-              className="w-10 h-10 mx-auto mb-4"
-            />
-          </Link>
-            <h1 className="text-3xl font-bold text-gray-800">Welcome Back!</h1>
-            <p className="text-gray-600">Sign up to your PocketBuddy account</p>
-          </div>
-  
-          {/* Login Form */}
-          <form className="space-y-6" onSubmit={handleSubmit(submitHandler)}>
-            {/* fnane Field */}
-           
-            <div>
-             
-              <div className="mt-1 relative">
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  placeholder="Enter your FirstName"
-                  {...register("firstName",allValidators.nameValidators)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-  
-                />
-                <i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i>
-              </div>
-              <span style={{ color: "red" }}>{errors.firstName ? errors.firstName.message : ""}</span>
-            </div>
-{/* lname */}
-            <div>
-             
-              <div className="mt-1 relative">
-                <input
-                  type="text"
-               
-                  placeholder="Enter lastname"
-                  {...register("lastName",allValidators.nameValidators)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-  
-                />
-                <i className="fas fa-envelope absolute right-3 top-3 text-gray-400"></i>
-              </div>
-              <span style={{ color: "red" }}>{errors.lastName ? errors.lastName.message : ""}</span>
-            </div>
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        try {
+            await axios.post("/signup", data);
             
-  {/* email */}
-  <div>
-              <div className="mt-1 relative">
-                <input
-                  type="email"
-               
-                  placeholder="Enter Email"
-                  {...register("email",allValidators.emailValidators)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-  
-                />
-                <i className="fas fa-user absolute right-3 top-3 text-gray-400"></i>
-              </div>
-              <span style={{ color: "red" }}>{errors.email ? errors.email.message : ""}</span>
+            toast.success('Account created successfully! Redirecting...', {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                theme: "dark",
+                transition: Slide,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+            setTimeout(() => navigate("/signin"), 1600);
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Registration failed', {
+                position: "top-center"
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+            <div className="w-full max-w-4xl">
+                {/* Form Container */}
+                <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
+                    <div className="flex flex-col md:flex-row">
+                        {/* Left Side - Branding */}
+                        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-8 text-white md:w-1/3 flex flex-col justify-center">
+                            <div className="text-center">
+                                <h1 className="text-3xl font-bold mb-2">Welcome!</h1>
+                                <p className="mb-6">Join our community and start your journey with us</p>
+                                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 inline-block">
+                                    <p className="text-sm">Already have an account?</p>
+                                    <Link 
+                                        to="/signin" 
+                                        className="font-medium text-white hover:text-indigo-200"
+                                    >
+                                        Sign in here
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Side - Form */}
+                        <div className="p-8 md:w-2/3">
+                            <div className="text-center mb-8">
+                                <h1 className="text-2xl font-bold text-gray-800">Create your account</h1>
+                                <p className="text-gray-600 mt-2">Fill in your details below</p>
+                            </div>
+
+                            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Personal Information */}
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                        <input
+                                            type="text"
+                                            {...register("firstName", { required: "First name is required" })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            placeholder="John"
+                                            autoComplete="given-name"
+                                        />
+                                        {errors.firstName && <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                        <input
+                                            type="text"
+                                            {...register("lastName", { required: "Last name is required" })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            placeholder="Doe"
+                                            autoComplete="family-name"
+                                        />
+                                        {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                        <select
+                                            {...register("gender", { required: "Gender is required" })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            defaultValue=""
+                                        >
+                                            <option value="" disabled>Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                           
+                                        </select>
+                                        {errors.gender && <p className="mt-1 text-sm text-red-600">{errors.gender.message}</p>}
+                                    </div>
+                                </div>
+
+                                {/* Contact & Account Information */}
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Contact & Account</h3>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <input
+                                            type="email"
+                                            {...register("email", { 
+                                                required: "Email is required",
+                                                pattern: {
+                                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                    message: "Invalid email address"
+                                                }
+                                            })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            placeholder="your@email.com"
+                                            autoComplete="off"
+                                        />
+                                        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <input
+                                            type="tel"
+                                            {...register("contact", { 
+                                                required: "Phone number is required",
+                                                minLength: {
+                                                    value: 10,
+                                                    message: "Phone number must be 10 digits"
+                                                },
+                                                maxLength: {
+                                                    value: 10,
+                                                    message: "Phone number must be 10 digits"
+                                                }
+                                            })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            placeholder="1234567890"
+                                            autoComplete="off"
+                                        />
+                                        {errors.contact && <p className="mt-1 text-sm text-red-600">{errors.contact.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                        <input
+                                            type="password"
+                                            {...register("password", { 
+                                                required: "Password is required",
+                                                minLength: {
+                                                    value: 8,
+                                                    message: "Password must be at least 8 characters"
+                                                }
+                                            })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            placeholder="••••••••"
+                                            autoComplete="new-password"
+                                        />
+                                        {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                                        <select
+                                            {...register("role", { required: "Role is required" })}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                                            defaultValue=""
+                                        >
+                                            <option value="" disabled>Select Role</option>
+                                            {roles.map((role) => (
+                                                <option key={role._id} value={role._id}>{role.roleName}</option>
+                                            ))}
+                                        </select>
+                                        {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>}
+                                    </div>
+                                </div>
+
+                                {/* Terms and Submit */}
+                                <div className="md:col-span-2">
+                                    <div className="flex items-start">
+                                        <div className="flex items-center h-5">
+                                            <input
+                                                id="terms"
+                                                type="checkbox"
+                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                            <label htmlFor="terms" className="font-medium text-gray-700">
+                                                I agree to the <a href="#" className="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
+                                            </label> <span className='font-medium text-red-600 ml-8'>*Please Wait for while after signup</span>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className={`w-full mt-6 bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition font-medium ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+                                    >
+                                        {isLoading ? 'Creating Account...' : 'Create Account'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Password Field */}
-            <div>
-             
-              <div className="mt-1 relative">
-                <input
-                 type='password'
-                  name="password"
-                  {...register("password",allValidators.passwordValidators)}
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              
-                />
-                <i className="fas fa-lock absolute right-3 top-3 text-gray-400"></i>
-                <span style={{ color: "red" }}>{errors.password ? errors.password.message : ""} </span>
-              </div>
-            </div>
-  {/* gender */}
-  <div>
-             
-             <div className="mt-1 relative">
-              <select name="" className='w-full px-4 py-2 border border-gray-300 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none' {...register("gender",allValidators.genderValidators)}>
-                <option value="" selected disabled>Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-             
-               <span style={{ color: "red" }}>{errors.gender ? errors.gender.message : ""} </span>
-             </div>
-           </div>
-
-           {/* contact */}
-           
-           <div>
-             
-             <div className="mt-1 relative">
-               <input
-               
-                type='number'
-                 {...register("contact",allValidators.contactValidators)}
-                 placeholder="Enter your Contact"
-                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-             
-               />
-              
-               <span style={{ color: "red" }}>{errors.contact ? errors.contact.message : ""} </span>
-             </div>
-           </div>
-
-           {/* Role  */}
-           <div>
-             
-             <div className="mt-1 relative">
-              <select name="" className='w-full px-4 py-2 border border-gray-300 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none' {...register("role",allValidators.roleVlidators)}>
-                <option value="" selected disabled>Select Role</option>
-                {
-             roles.map((role)=>{
-                  return (
-                    <option value={role._id}>{role.roleName}</option>
-                  )
-            }) 
-               }
-
-                
-               
-              </select>
-             
-               <span style={{ color: "red" }}>{errors.gender ? errors.gender.message : ""} </span>
-             </div>
-           </div>
-           
-
-            {/* Remember Me and Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember-me"
-                  name="remember-me"
-                  className="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                  Remember me
-                </label>
-              </div>
-              <div className="text-sm">
-                <a href="#" className="text-blue-500 hover:text-blue-700">
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-  
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-300"
-              >
-                Sign Up
-              </button>
-            </div>
-          </form>
-  
-          {/* Sign Up Link */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/signin" className="text-blue-500 hover:text-blue-700">
-                Sign In
-              </Link>
-            </p>
-          </div>
+            <ToastContainer />
         </div>
-        </div>
-
-    </>
-  )
-}
+    );
+};

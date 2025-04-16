@@ -96,6 +96,17 @@ body {
     font-size: 14px;
     transition: 0.3s;
 }
+.claim-offer3{
+    background: #d14949;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
 
 .claim-offer:hover {
     background: #d81b60;
