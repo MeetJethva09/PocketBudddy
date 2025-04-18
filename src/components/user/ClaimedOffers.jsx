@@ -14,7 +14,7 @@ export const ClaimedOffers = () => {
     const getClaimedOfferByOfferId = async ()=>{
         const res = await axios.get("/getofferbyofferid/" + offerid);
         setOffer(res.data.data)
-        console.log(res.data.data)
+       
     }
 
 

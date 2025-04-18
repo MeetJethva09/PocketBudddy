@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate, useParams } from 'react-router-dom';
 import { Footer } from '../common/Footer';
 import { Rewind, Search, ChevronDown, LogOut, Ticket, MapPin } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 
 export const UserViewOffer = () => {
     const id = useParams().id;
@@ -15,6 +16,7 @@ export const UserViewOffer = () => {
     const [name, setName] = useState({})
     const [isOpen, setIsOpen] = useState(false);
     const [offer, setOffer] = useState({});
+    const {register , handleSubmit} = useForm({});
 
     const logOutAction = () => {
         localStorage.clear();
@@ -32,11 +34,12 @@ export const UserViewOffer = () => {
      
     }
 
-    const handleClaimOffer = async () => {
-        // Add your claim offer logic here
-        const addClaimedOffer = await axios.post()
-        // You might want to add a toast notification here
+
+    const submitHandler = (data) =>{
+        console.log(data)
     }
+
+   
 
     useEffect(() => {
         getUserName()
@@ -120,21 +123,22 @@ export const UserViewOffer = () => {
                         Back to offers
                     </button>
 
-                    {/* Modern Offer Card */}
+                    {/* Modern Offer Card */}.
+                    <form onSubmit={handleSubmit(submitHandler)}>
                     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg">
                         <div className="md:flex">
                             <div className="md:flex-shrink-0 md:w-1/3">
-                                <img 
+                                <img {...register("offerImage")}
                                     src={offer.offerImage}
                                     alt="Offer" 
                                     className="h-full w-full object-cover md:h-full md:w-full" 
                                 />
                             </div>
                             <div className="p-8 md:w-2/3">
-                                <div className="uppercase tracking-wide text-sm text-indigo-600 font-semibold mb-1">
+                                <div {...register("foodtype")} className="uppercase tracking-wide text-sm text-indigo-600 font-semibold mb-1">
                                     {offer.foodType}
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                                <h2 {...register("offerTitle")}className="text-2xl font-bold text-gray-800 mb-4">
                                     {offer.offerTitle}
                                 </h2>
                                 
@@ -148,30 +152,30 @@ export const UserViewOffer = () => {
                                     </div>
                                 )}
                                 
-                                <p className="mt-2 text-gray-600 mb-6">
+                                <p {...register("offerDesc")} className="mt-2 text-gray-600 mb-6">
                                     {offer.offerDesc}
                                 </p>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                                     <div className="bg-gray-50 p-4 rounded-lg">
                                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Start Time</h3>
-                                        <p className="mt-1 text-sm font-medium text-gray-900">
+                                        <p className="mt-1 text-sm font-medium text-gray-900" {...register("offerStart")}>
                                             {new Date(offer.offerStart).toLocaleDateString()} at {new Date(offer.offerStart).toLocaleTimeString()}
                                         </p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg">
                                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">End Time</h3>
-                                        <p className="mt-1 text-sm font-medium text-gray-900">
+                                        <p {...register("offerEnd")} className="mt-1 text-sm font-medium text-gray-900">
                                             {new Date(offer.offerEnd).toLocaleDateString()} at {new Date(offer.offerEnd).toLocaleTimeString()}
                                         </p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg">
                                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</h3>
-                                        <p className="mt-1 text-sm font-medium text-gray-900">{offer.offerStatus}</p>
+                                        <p {...register("offerStatus")} className="mt-1 text-sm font-medium text-gray-900">{offer.offerStatus}</p>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg">
                                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Food Type</h3>
-                                        <p className="mt-1 text-sm font-medium text-gray-900">{offer.foodType}</p>
+                                        <p {...register("foodType")} className="mt-1 text-sm font-medium text-gray-900">{offer.foodType}</p>
                                     </div>
                                 </div>
 
@@ -179,8 +183,8 @@ export const UserViewOffer = () => {
                                 <div className="mt-8">
                                     {offer.offerStatus === 'Unavailable' ? alert("Offer Unavailable") :
                                     <Link to={`/userclaimeoffers/${offer._id}`}>
-                                        <button
-                                            onClick={handleClaimOffer}
+                                        <button type='submit'
+                                           
                                             className="w-full md:w-auto flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-[1.02]"
                                         >
                                             <Ticket className="h-5 w-5 mr-2" />
@@ -191,6 +195,8 @@ export const UserViewOffer = () => {
                             </div>
                         </div>
                     </div>
+                        </form>
+
                 </div>
             </main>
 
